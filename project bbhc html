@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Event Handler</title>
+    <link rel="stylesheet" href="des.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Campus Events <span>2026</span></h1>
+            <p>Manage and discover upcoming college activities.</p>
+        </header>
+
+        <section class="event-form">
+            <h3>Post a New Event</h3>
+            <form id="eventForm">
+                <input type="text" id="title" placeholder="Event Name" required>
+                <input type="date" id="date" required>
+                <input type="text" id="venue" placeholder="Venue (e.g. Auditorium)" required>
+                <button type="submit">Add to Calendar</button>
+            </form>
+        </section>
+
+        <section class="event-display">
+            <h2>Upcoming Schedule</h2>
+            <div id="eventList" class="grid">
+                </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
