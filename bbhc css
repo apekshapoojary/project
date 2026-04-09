@@ -1,0 +1,92 @@
+:root {
+    --primary: #4f46e5;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+header h1 span {
+    color: var(--primary);
+}
+
+/* Form Styling */
+.event-form {
+    background: var(--card);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+}
+
+form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+input {
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    flex: 1;
+    min-width: 150px;
+}
+
+button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: opacity 0.2s;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* Event Cards */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.event-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 5px solid var(--primary);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.event-card h4 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+}
+
+.event-card p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #64748b;
+}
