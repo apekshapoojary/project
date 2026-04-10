@@ -47,7 +47,15 @@ input {
     border: 1px solid #e2e8f0;
     border-radius: 6px;
     flex: 1;
-    min-width: 150px;
+    min-width: 200px;
+    font-family: inherit;
+}
+
+.event-card .meta-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 10px;
 }
 
 button {
