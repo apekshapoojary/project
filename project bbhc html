@@ -3,31 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>College Event Handler</title>
+    <title>Academic Event Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="des.css">
 </head>
 <body>
 
     <div class="container">
         <header>
-            <h1>Campus Events <span>2026</span></h1>
-            <p>Manage and discover upcoming college activities.</p>
+            <h1>Campus Events <span class="year-badge">2026</span></h1>
+            <p>Institutional Excellence • Student Engagement • Academic Calendar</p>
         </header>
 
         <section class="event-form">
-            <h3>Post a New Event</h3>
+            <h3>Register New Activity</h3>
             <form id="eventForm">
-                <input type="text" id="title" placeholder="Event Name" required>
-                <input type="date" id="date" required>
-                <input type="text" id="venue" placeholder="Venue (e.g. Auditorium)" required>
-                <button type="submit">Add to Calendar</button>
+                <div class="input-group">
+                    <input type="text" id="title" placeholder="Event Name" required>
+                    <input type="text" id="coordinator" placeholder="Lead Coordinator" required>
+                </div>
+                <div class="input-group">
+                    <input type="date" id="date" required>
+                    <input type="time" id="time" required>
+                    <input type="text" id="venue" placeholder="Venue / Hall Number" required>
+                </div>
+                <button type="submit">Schedule Event</button>
             </form>
         </section>
 
         <section class="event-display">
-            <h2>Upcoming Schedule</h2>
+            <div class="section-header">
+                <h2>Upcoming Schedule</h2>
+                <div class="line"></div>
+            </div>
             <div id="eventList" class="grid">
+                <div class="event-card">
+                    <div class="card-date">OCT 24</div>
+                    <h4>Distinguished Lecture Series</h4>
+                    <p><strong>By:</strong> Dr. Julian Vance</p>
+                    <p><strong>Where:</strong> Great Hall</p>
                 </div>
+            </div>
         </section>
     </div>
 
