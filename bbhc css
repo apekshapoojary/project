@@ -1,100 +1,108 @@
 :root {
-    --primary: #4f46e5;
-    --bg: #f8fafc;
-    --card: #ffffff;
-    --text: #1e293b;
+  --primary: #1f1f21;
+  --bg: #f8fafc;
+  --card: #ffffff00;
+  --text: #d5dae1;
+  --light-blue: #e0f2fe; /* Define a light blue variable for easier access */
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-    margin: 0;
-    padding: 20px;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(rgba(231, 11, 106, 0), rgba(15, 77, 139, 0)),
+              url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJhSkWjNHXx1erfWXnJ29uNWoRFmu2U6VrpQ&s');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 .container {
-    max-width: 900px;
-    margin: 0 auto;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 header {
-    text-align: center;
-    margin-bottom: 40px;
+  text-align: center;
+  margin-bottom: 40px;
 }
 
 header h1 span {
-    color: var(--primary);
+  color: var(--primary);
 }
 
 /* Form Styling */
 .event-form {
-    background: var(--card);
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    margin-bottom: 40px;
+  background: var(--card);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
 }
 
 form {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 input {
-    padding: 12px;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    flex: 1;
-    min-width: 200px;
-    font-family: inherit;
+  padding: 12px;
+  border: 1px solid var(--light-blue); /* Use the light-blue variable */
+  border-radius: 6px;
+  flex: 1;
+  min-width: 200px;
+  font-family: inherit;
 }
 
 .event-card .meta-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 10px;
 }
 
 button {
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: opacity 0.2s;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.2s;
 }
 
 button:hover {
-    opacity: 0.9;
+  opacity: 0.9;
 }
 
 /* Event Cards */
 .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
 }
 
 .event-card {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    border-left: 5px solid var(--primary);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  background: #f1f5f9; /* Define a very light grey for event card bg */
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 5px solid var(--primary);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .event-card h4 {
-    margin: 0 0 10px 0;
-    font-size: 1.2rem;
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
 }
 
 .event-card p {
-    margin: 5px 0;
-    font-size: 0.9rem;
-    color: #64748b;
+  margin: 5px 0;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.section-header .line {
+  height: 2px;
+  background-color: var(--primary);
+  margin-top: 10px;
 }
