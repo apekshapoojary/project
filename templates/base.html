@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventLink - Intelligent Orchestration</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Libraries -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <div class="page-loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Global Sidebar -->
+    {% if not hide_sidebar %}
+    <div class="sidebar">
+        <div class="logo" style="padding: 30px; margin-bottom: 20px;">
+            <span class="icon" style="color: #7b5cff; font-size: 24px;"><i class="fas fa-bolt"></i></span>
+            <span class="brand" style="font-weight: 800; font-size: 1.3rem;">Event Manager</span>
+        </div>
+        <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 5px;"><a href="/" class="nav-link {{ 'active' if request.path == '/' }}" style="display: flex; align-items: center; gap: 15px; padding: 12px 30px;"><i class="fas fa-grid-2"></i> Dashboard</a></li>
+            {% if session.role == 'student' %}
+            <li style="margin-bottom: 5px;"><a href="/dashboard" class="nav-link {{ 'active' if request.path == '/dashboard' }}" style="display: flex; align-items: center; gap: 15px; padding: 12px 30px;"><i class="fas fa-calendar-check"></i> My Events</a></li>
+            {% endif %}
+            
+            {% if session.role in ['admin', 'organizer'] %}
+            <li style="margin-bottom: 5px;"><a href="/create_event" class="nav-link {{ 'active' if request.path == '/create_event' }}" style="display: flex; align-items: center; gap: 15px; padding: 12px 30px;"><i class="fas fa-plus-circle"></i> Create New</a></li>
+            <li style="margin-bottom: 5px;"><a href="/admin/scanner" class="nav-link {{ 'active' if request.path == '/admin/scanner' }}" style="display: flex; align-items: center; gap: 15px; padding: 12px 30px;"><i class="fas fa-qrcode"></i> QR Scanner</a></li>
+            {% endif %}
+        </ul>
+        
+        <div style="margin-top: auto; padding: 30px;">
+            {% if session.user_id %}
+            <a href="/logout" style="color: var(--secondary); text-decoration: none; font-size: 0.9rem; font-weight: 600;">
+                <i class="fas fa-power-off"></i> Logout
+            </a>
+            {% else %}
+            <a href="/login" class="btn-primary-glow" style="display: block; text-align: center; padding: 10px; font-size: 0.8rem;">Access Platform</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <main class="main-content" style="{{ 'margin-left: 0; width: 100%; padding: 0;' if hide_sidebar else '' }}">
+        {% if not hide_sidebar %}
+        <header class="navbar sticky-nav">
+            <div class="nav-left" style="display: flex; align-items: center; gap: 15px;">
+                <button class="mobile-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                <span class="breadcrumb" style="opacity: 0.5; font-size: 0.8rem;">System / <span style="opacity: 1; font-weight: 600;">Current Stream</span></span>
+            </div>
+            <div class="nav-right" style="display: flex; align-items: center; gap: 20px;">
+                <div class="nav-icon-group" style="display: flex; gap: 20px; font-size: 1.1rem; opacity: 0.7;">
+                    <i class="far fa-bell" style="cursor: pointer;"></i>
+                    <i class="far fa-search" style="cursor: pointer;"></i>
+                </div>
+                <div class="auth-group" style="display: flex; align-items: center; gap: 15px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 20px;">
+                    {% if session.user_id or session.admin_id %}
+                        <span style="font-size: 0.85rem; font-weight: 600; opacity: 0.9;">{{ session.name or session.admin_email }}</span>
+                        <a href="{{ url_for('admin.admin_logout') if session.admin_id else url_for('auth.logout') }}" class="nav-link" title="Logout" style="font-size: 1rem; color: #fb7185;"><i class="fas fa-power-off"></i></a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="nav-link" style="font-size: 0.9rem; font-weight: 600;">Login</a>
+                        <a href="{{ url_for('auth.register') }}" class="btn-primary-glow" style="padding: 8px 20px; font-size: 0.8rem; border-radius: 10px; text-decoration: none;">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+        {% endif %}
+
+        <section style="{{ 'padding: 0;' if hide_sidebar else 'padding: 20px 40px;' }}" class="content-section">
+        {% if not hide_alerts %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} glass-card" style="margin-bottom: 20px; padding: 15px 25px; border-radius: 12px;">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+        </section>
+    </main>
+
+    <!-- JS Libraries -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <script>
+        AOS.init({
+            duration: 600,
+            once: true
+        });
+
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            const sidebar = document.querySelector('.sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+            if (window.innerWidth <= 992 && 
+                sidebar.classList.contains('active') && 
+                !sidebar.contains(e.target) && 
+                !toggle.contains(e.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

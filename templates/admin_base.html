@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard{% endblock %} - EventLink</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo" style="padding: 30px; margin-bottom: 20px;">
+            <span class="icon" style="color: #7b5cff; font-size: 24px;"><i class="fas fa-bolt"></i></span>
+            <span class="brand" style="font-weight: 800; font-size: 1.3rem;">Event Manager</span>
+        </div>
+        <ul>
+            <li><a href="/admin/dashboard" class="nav-link {% if request.path == '/admin/dashboard' %}active{% endif %}"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="/admin/events" class="nav-link {% if request.path == '/admin/events' %}active{% endif %}"><i class="fas fa-calendar-alt"></i> Events</a></li>
+            <li><a href="/admin/participants/total" class="nav-link {% if 'participants' in request.path %}active{% endif %}"><i class="fas fa-users"></i> Participants</a></li>
+            <li class="btn-logout"><a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main-wrapper">
+        <header class="navbar sticky-nav">
+             <div class="nav-left" style="display: flex; align-items: center; gap: 15px;">
+                <button class="mobile-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                <span class="breadcrumb" style="opacity: 0.5; font-size: 0.8rem;">Admin / <span style="opacity: 1; font-weight: 600;">Intelligence Dashboard</span></span>
+            </div>
+            <div class="nav-right" style="display: flex; align-items: center; gap: 20px;">
+                <div class="admin-profile">
+                    <i class="fas fa-user-circle" style="font-size: 1.5rem; color: var(--primary);"></i>
+                    <span>{{ session.admin_email }}</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-body">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- JS Libraries -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <script>
+        AOS.init({
+            duration: 600,
+            once: true
+        });
+
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            const sidebar = document.querySelector('.sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+            if (window.innerWidth <= 992 && 
+                sidebar.classList.contains('active') && 
+                !sidebar.contains(e.target) && 
+                !toggle.contains(e.target)) {
+                sidebar.classList.remove('active');
+            }
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

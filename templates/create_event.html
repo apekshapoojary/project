@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-container glass">
+    <div class="section-header">
+        <h2><i class="fas fa-plus-circle"></i> Create New Event</h3>
+        <p>Fill in the details below to schedule your event on the portal.</p>
+    </div>
+    
+    <form action="/create_event" method="POST">
+        <div class="form-group">
+            <label for="title">Event Name</label>
+            <input type="text" id="title" name="title" placeholder="e.g. Annual Tech Symposium" required>
+        </div>
+        
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="date">Event Date</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label for="venue">Venue</label>
+                <input type="text" id="venue" name="venue" placeholder="e.g. Main Auditorium" required>
+            </div>
+        </div>
+
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label for="reg_start">Registration Start</label>
+                <input type="date" id="reg_start" name="reg_start" required>
+            </div>
+            <div class="form-group">
+                <label for="reg_deadline">Registration Deadline</label>
+                <input type="date" id="reg_deadline" name="reg_deadline" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="coordinator">Lead Coordinator</label>
+            <input type="text" id="coordinator" name="coordinator" placeholder="e.g. Prof. Smith" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description (Optional)</label>
+            <textarea id="description" name="description" rows="4" placeholder="Briefly describe what the event is about..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Schedule Event</button>
+    </form>
+</div>
+{% endblock %}

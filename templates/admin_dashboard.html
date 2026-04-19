@@ -1,0 +1,56 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+<div class="dash-layout">
+    <!-- Main Content -->
+    <div class="main-dash">
+        <div class="dashboard-header mb-5" data-aos="fade-down">
+            <h1 class="gradient-text">{{ 'Global Operations' if session.role == 'admin' else 'Event Command' }}</h1>
+            <p style="opacity: 0.7;">{{ 'Complete oversight of campus-wide engagement and infrastructure.' if session.role == 'admin' else 'Manage your event portfolio and participant engagement.' }}</p>
+        </div>
+
+        <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 40px;">
+            <div class="stat-card glass-card" style="padding: 30px; text-align: center;" data-aos="zoom-in">
+                <i class="fas fa-calendar-check mb-3" style="font-size: 2.5rem; color: var(--primary);"></i>
+                <div class="value count" data-target="{{ total_events }}" style="font-size: 3rem; font-weight: 800;">{{ total_events }}</div>
+                <p style="margin:0; opacity: 0.6; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">{{ 'Live Events' if session.role == 'admin' else 'My Events' }}</p>
+            </div>
+            <div class="stat-card glass-card" style="padding: 30px; text-align: center;" data-aos="zoom-in" data-aos-delay="200">
+                <i class="fas fa-users-viewfinder mb-3" style="font-size: 2.5rem; color: var(--secondary);"></i>
+                <div class="value count" data-target="{{ total_registrations }}" style="font-size: 3rem; font-weight: 800;">{{ total_registrations }}</div>
+                <p style="margin:0; opacity: 0.6; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">{{ 'Total Participants' if session.role == 'admin' else 'Registrations' }}</p>
+            </div>
+            <div class="stat-card glass-card" style="padding: 30px; text-align: center;" data-aos="zoom-in" data-aos-delay="400">
+                <i class="fas fa-user-shield mb-3" style="font-size: 2.5rem; color: var(--accent);"></i>
+                <div class="value count" data-target="{{ total_users }}" style="font-size: 3rem; font-weight: 800;">{{ total_users }}</div>
+                <p style="margin:0; opacity: 0.6; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">{{ 'Privileged Users' if session.role == 'admin' else 'Unique Reach' }}</p>
+            </div>
+        </div>
+
+        <div class="glass-card" style="padding: 40px;" data-aos="fade-up">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h3><i class="fas fa-microchip mr-2" style="color: var(--primary);"></i> System Controls</h3>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
+                <a href="/create_event" class="glass-card btn-ripple" style="padding: 20px; text-align: center; text-decoration: none; color: white;">
+                    <i class="fas fa-calendar-plus" style="font-size: 1.5rem; color: var(--primary); display: block; margin-bottom: 10px;"></i>
+                    Schedule Event
+                </a>
+                <a href="/admin/scanner" class="glass-card btn-ripple" style="padding: 20px; text-align: center; text-decoration: none; color: white;">
+                    <i class="fas fa-qrcode" style="font-size: 1.5rem; color: var(--secondary); display: block; margin-bottom: 10px;"></i>
+                    Active Scanner
+                </a>
+                <a href="/admin/generate_bulk_certificates" class="glass-card btn-ripple" style="padding: 20px; text-align: center; text-decoration: none; color: white;">
+                    <i class="fas fa-certificate" style="font-size: 1.5rem; color: #facc15; display: block; margin-bottom: 10px;"></i>
+                    Issue Certificates
+                </a>
+                <a href="/admin/events" class="glass-card btn-ripple" style="padding: 20px; text-align: center; text-decoration: none; color: white;">
+                    <i class="fas fa-database" style="font-size: 1.5rem; color: var(--accent); display: block; margin-bottom: 10px;"></i>
+                    Event Registry
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

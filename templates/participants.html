@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card-style">
+    <div class="section-header">
+        <h2><i class="fas fa-users"></i> Event Participants</h3>
+        <p>List of all students registered for various campus events.</p>
+    </div>
+
+    <table class="modern-table">
+        <thead>
+            <tr>
+                <th>Participant Name</th>
+                <th>Email</th>
+                <th>Event</th>
+                <th>Attendance</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reg in registrations %}
+            <tr>
+                <td>{{ reg.name }}</td>
+                <td>{{ reg.email }}</td>
+                <td>{{ reg.event_title }}</td>
+                <td>
+                    {% if reg.attendance %}
+                        <span class="badge badge-success">Present</span>
+                    {% else %}
+                        <span class="badge badge-warning">Pending</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/download_certificate/{{ reg._id|string }}" class="btn-icon"><i class="fas fa-certificate"></i></a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center;">No participants found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+.badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+.badge-success { background: #dcfce7; color: #166534; }
+.badge-warning { background: #fef9c3; color: #854d0e; }
+</style>
+{% endblock %}

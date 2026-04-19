@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="scanner-container glass-card" data-aos="zoom-in" style="max-width: 600px; margin: 100px auto; padding: 40px; text-align: center;">
+    <h1 class="gradient-text mb-4">Event Check-In</h1>
+    <p class="mb-5">Scan participant QR code to mark attendance automatically.</p>
+    
+    <div id="reader" style="width: 100%; border-radius: 20px; overflow: hidden; border: 2px solid var(--primary);"></div>
+    
+    <div id="scan-result" class="mt-4" style="display: none;">
+        <div class="alert alert-success glass-card">
+            <h4 id="participant-name"></h4>
+            <p id="event-title"></p>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+    function onScanSuccess(decodedText, decodedResult) {
+        // Expected format: reg_id:ID|user:NAME|event:ID
+        console.log(`Code matched = ${decodedText}`, decodedResult);
+        
+        // Disable scanner temporarily
+        html5QrcodeScanner.clear();
+        
+        const data = {};
+        decodedText.split('|').forEach(part => {
+            const [key, value] = part.split(':');
+            data[key] = value;
+        });
+
+        // Send to backend
+        fetch('/admin/mark_attendance', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reg_id: data.reg_id })
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.status === 'success') {
+                document.getElementById('scan-result').style.display = 'block';
+                document.getElementById('participant-name').innerText = "Attended: " + res.name;
+                document.getElementById('event-title').innerText = res.event;
+                
+                // Restart scanner after 3 seconds
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
+            } else {
+                alert("Error: " + res.message);
+                location.reload();
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert("External Error occurred while marking attendance.");
+        });
+    }
+
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", { fps: 10, qrbox: {width: 250, height: 250} }, /* verbose= */ false);
+    html5QrcodeScanner.render(onScanSuccess);
+</script>
+{% endblock %}

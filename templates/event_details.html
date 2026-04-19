@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="event-details-container glass">
+    <div class="event-header-banner" style="position: relative; overflow: hidden;">
+        {% set img_url = '/static/images/Techevent.jpg' %}
+        {% if event.category == 'Cultural' %}
+        {% set img_url = '/static/images/cultural.jpg' %}
+        {% elif event.category == 'Sports' %}
+        {% set img_url = '/static/images/sports.jpg' %}
+        {% elif 'Robotics' in event.title %}
+        {% set img_url = '/static/images/Robotics.jpg' %}
+        {% endif %}
+        <img src="{{ img_url }}" alt="{{ event.title }}"
+            style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);">
+        <div class="overlay"></div>
+    </div>
+
+    <div class="event-body">
+        <div class="event-main-info">
+            <h1>{{ event.title }}</h1>
+            <div class="event-meta-lg">
+                <p><i class="fas fa-calendar-day"></i> <strong>Event Date:</strong> {{ event.date }}</p>
+                <p><i class="fas fa-map-marker-alt"></i> <strong>Venue:</strong> {{ event.venue }}</p>
+                <p><i class="fas fa-user-tie"></i> <strong>Coordinator:</strong> {{ event.coordinator }}</p>
+            </div>
+            
+            <div class="event-meta-lg" style="margin-top: 0;">
+                <p style="background: #fff7ed; border: 1px solid #ffedd5; color: #9a3412;">
+                    <i class="fas fa-hourglass-start"></i> <strong>Registration Starts:</strong> {{ event.reg_start }}
+                </p>
+                <p style="background: #fef2f2; border: 1px solid #fee2e2; color: #991b1b;">
+                    <i class="fas fa-hourglass-end"></i> <strong>Deadline:</strong> {{ event.reg_deadline }}
+                </p>
+            </div>
+
+            <div class="event-description">
+                <h3>About Event</h3>
+                <p>{{ event.description if event.description else "No description provided." }}</p>
+            </div>
+        </div>
+
+        <div class="event-sidebar">
+            <div class="register-card">
+                <h3>Interested?</h3>
+                <p>Register now to secure your spot!</p>
+                <form action="/register/{{ event._id|string }}" method="POST">
+                    <div class="form-group" style="margin-bottom: 10px;">
+                        <input type="text" name="name" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                        <input type="text" name="class_name" placeholder="Class (e.g. 10th)" required>
+                        <input type="text" name="section" placeholder="Section (e.g. A)" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 10px;">
+                        <input type="tel" name="phone" placeholder="Phone Number (10 digits)" pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <input type="email" name="email" placeholder="Email Address" required>
+                    </div>
+                    <button type="submit" class="btn-submit" style="width: 100%;">Register for Event</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .event-details-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        background: var(--card-bg);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+
+    .event-header-banner {
+        height: 300px;
+        background: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    .event-body {
+        padding: 40px;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 40px;
+    }
+
+    @media (max-width: 768px) {
+        .event-body {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .event-meta-lg {
+        margin: 20px 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .event-meta-lg p {
+        background: #f3f4f6;
+        padding: 10px 15px;
+        border-radius: 10px;
+        color: #1f2937;
+        /* Dark text for visibility on light background */
+        font-weight: 500;
+    }
+
+    .event-description {
+        margin-top: 30px;
+    }
+
+    .register-card {
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 16px;
+        border: 1px solid #e5e7eb;
+        color: #1f2937;
+        /* Ensures all text inside is dark */
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .register-card p {
+        color: #4b5563;
+        /* Subtitle color */
+        margin-bottom: 20px;
+    }
+
+    .register-card h3 {
+        color: var(--primary);
+        margin-bottom: 5px;
+        font-weight: 700;
+    }
+
+    .register-card input {
+        background: #f3f4f6 !important;
+        border: 1px solid #d1d5db !important;
+        color: #1f2937 !important;
+    }
+
+    .register-card input::placeholder {
+        color: #9ca3af !important;
+        opacity: 1;
+    }
+</style>
+{% endblock %}

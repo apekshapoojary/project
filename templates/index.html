@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="top-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <div>
+            <h1 style="font-size: 1.8rem; font-weight: 800; margin:0;">Platform <span class="gradient-text">Overview</span></h1>
+            <p style="opacity: 0.6; font-size: 0.9rem;">Intelligence-driven campus event orchestration.</p>
+        </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="mini-stat glass-card">
+            <i class="fas fa-calendar-alt"></i>
+            <div class="info">
+                <h4 class="count" data-target="{{ events|length }}">0</h4>
+                <p>Total Events</p>
+            </div>
+        </div>
+        <div class="mini-stat glass-card">
+            <i class="fas fa-users"></i>
+            <div class="info">
+                <h4 class="count" data-target="1420">0</h4>
+                <p>Global Registrations</p>
+            </div>
+        </div>
+        <div class="mini-stat glass-card">
+            <i class="fas fa-bolt"></i>
+            <div class="info">
+                <h4 class="count" data-target="8">0</h4>
+                <p>Ongoing Today</p>
+            </div>
+        </div>
+        <div class="mini-stat glass-card">
+            <i class="fas fa-clock"></i>
+            <div class="info">
+                <h4 class="count" data-target="12">0</h4>
+                <p>Upcoming Deadlines</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Sections -->
+    <div style="display: grid; grid-template-columns: 3fr 1.2fr; gap: 30px; align-items: start;">
+        <div>
+            <div class="section-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <h3><i class="fas fa-sparkles" style="color: #facc15;"></i> Featured Streams</h3>
+                <a href="#" style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">View All</a>
+            </div>
+            
+            <div class="event-grid">
+                {% for event in events %}
+                <div class="event-card glass-card" data-aos="fade-up" data-aos-delay="{{ loop.index * 50 }}">
+                    <div class="card-img-compact" style="position: relative; overflow: hidden; border-radius: 12px 12px 0 0; background: #000;">
+                        {% set img_url = '/static/images/Techevent.jpg' %}
+                        {% if event.category == 'Cultural' %}
+                            {% set img_url = '/static/images/cultural.jpg' %}
+                        {% elif event.category == 'Sports' %}
+                            {% set img_url = '/static/images/sports.jpg' %}
+                        {% elif 'Robotics' in event.title %}
+                            {% set img_url = '/static/images/Robotics.jpg' %}
+                        {% endif %}
+                        <img src="{{ img_url }}" alt="{{ event.title }}">
+                        <div class="overlay"></div>
+                        <span class="badge badge-tech" style="position: absolute; top: 15px; left: 15px; z-index: 10;">{{ event.category or 'Technology' }}</span>
+                        <span class="badge badge-status" style="position: absolute; top: 15px; right: 15px; z-index: 10;">Open</span>
+                    </div>
+                    <div class="card-body-dense">
+                        <h3 style="margin-bottom: 12px;">{{ event.title }}</h3>
+                        <div class="mini-info">
+                            <span><i class="fas fa-calendar"></i> {{ event.date }}</span>
+                            <span><i class="fas fa-map-marker-alt"></i> {{ event.venue }}</span>
+                            <span><i class="fas fa-id-badge"></i> {{ event.coordinator }}</span>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="font-size: 0.75rem; opacity: 0.6;">Capacity Utilization</div>
+                            <div style="font-size: 0.85rem; font-weight: 700; color: var(--primary);">42 / 100 Reserved</div>
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <a href="{{ url_for('events.event_details', event_id=event._id|string) }}" class="btn-primary-glow" style="flex: 1; padding: 10px; text-align: center; font-size: 0.85rem; border-radius: 10px;">
+                                Register Protocol
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="section-divider"></div>
+            
+            <div class="section-header" id="trending">
+                <h3><i class="fas fa-fire" style="color: #fb7185;"></i> Trending Now</h3>
+            </div>
+            <div class="event-grid" style="grid-template-columns: 1fr; gap: 15px;">
+                {% for i in range(3) %}
+                <div class="event-card glass-card" style="opacity: 0.6;">
+                    <div class="card-body-dense" style="display: flex; align-items: center; gap: 15px;">
+                        <div style="width: 50px; height: 50px; background: var(--glass); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div>
+                            <h4 style="margin:0; font-size: 0.95rem;">Rapid Registration Data #{{ i }}</h4>
+                            <p style="margin:0; font-size: 0.75rem; opacity: 0.5;">Analyzing student engagement streams...</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Right Activity Sidebar -->
+        <div class="activity-feed" style="position: sticky; top: 100px;">
+            <div class="glass-card" style="padding: 25px;">
+                <h4 style="margin-bottom: 20px;"><i class="fas fa-wave-square"></i> Live Intel</h4>
+                
+                <div class="feed-list">
+                    {% for i in range(6) %}
+                    <div style="display: flex; gap: 12px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary); margin-top: 6px;"></div>
+                        <div>
+                            <p style="margin:0; font-size: 0.85rem; line-height: 1.4;">Participant <strong style="color: var(--primary);">User_{{ 100 + i }}</strong> just registered for Tech Nirvana.</p>
+                            <span style="font-size: 0.7rem; opacity: 0.4;">{{ i + 2 }} minutes ago</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="upcoming-deadlines" style="margin-top: 40px;">
+                    <h4 style="margin-bottom: 15px;"><i class="fas fa-hourglass-half"></i> Deadlines</h4>
+                    <div class="glass-card" style="padding: 15px; border-color: rgba(244, 63, 94, 0.3);">
+                        <p style="margin:0; font-size: 0.8rem; font-weight: 600;">Sports Meet Registration</p>
+                        <p style="margin:5px 0 0; font-size: 0.75rem; color: #fb7185;">Ending in 04:22:15</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}

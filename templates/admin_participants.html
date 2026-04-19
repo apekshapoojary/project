@@ -1,0 +1,61 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+<div class="header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px;">
+    <div>
+        <h2 style="margin:0;">Participants</h2>
+        <p style="color: var(--text-muted); margin: 5px 0 0;">Viewing registrations for: <strong>{{ event.title if event else "All Events" }}</strong></p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <a href="/admin/export_participants/{{ event._id|string if event else 'total' }}" class="btn-action" style="background: #16a34a; color: white; border: none; padding: 10px 20px;">
+            <i class="fas fa-file-excel"></i> Export Excel
+        </a>
+        <a href="/admin/export_participants_pdf/{{ event._id|string if event else 'total' }}" class="btn-action" style="background: #dc2626; color: white; border: none; padding: 10px 20px;">
+            <i class="fas fa-file-pdf"></i> Export PDF
+        </a>
+    </div>
+</div>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td style="font-weight: 600;">{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% if user.attendance %}
+                    <span style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">
+                        <i class="fas fa-check-circle"></i> Present
+                    </span>
+                    {% else %}
+                    <span style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">
+                        <i class="fas fa-check-circle"></i> Registered
+                    </span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if user.attendance or (event and event.date < current_date) %}
+                    <a href="/download_certificate/{{ user._id|string }}" class="btn-action" style="background: var(--white); color: var(--primary); border: 1px solid var(--primary);">Certificate</a>
+                    {% else %}
+                    <span style="opacity: 0.3; font-size: 0.8rem;"><i class="fas fa-lock"></i> Locked</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center; padding: 40px; color: var(--text-muted);">No participants registered yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

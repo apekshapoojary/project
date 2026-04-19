@@ -3,13 +3,14 @@
   --bg: #f8fafc;
   --card: #ffffff00;
   --text: #d5dae1;
-  --light-blue: #e0f2fe; /* Define a light blue variable for easier access */
+  --light-blue: #e0f2fe;
+  /* Define a light blue variable for easier access */
 }
 
 body {
   font-family: 'Inter', sans-serif;
   background: linear-gradient(rgba(231, 11, 106, 0), rgba(15, 77, 139, 0)),
-              url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJhSkWjNHXx1erfWXnJ29uNWoRFmu2U6VrpQ&s');
+    url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJhSkWjNHXx1erfWXnJ29uNWoRFmu2U6VrpQ&s');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -46,11 +47,14 @@ form {
 
 input {
   padding: 12px;
-  border: 1px solid var(--light-blue); /* Use the light-blue variable */
+  border: 1px solid var(--light-blue);
+  /* Use the light-blue variable */
   border-radius: 6px;
   flex: 1;
   min-width: 200px;
   font-family: inherit;
+  color: #ffffff;
+  /* Changed to white for visibility */
 }
 
 .event-card .meta-info {
@@ -83,11 +87,12 @@ button:hover {
 }
 
 .event-card {
-  background: #f1f5f9; /* Define a very light grey for event card bg */
+  background: #f1f5f9;
+  /* Define a very light grey for event card bg */
   padding: 20px;
   border-radius: 10px;
   border-left: 5px solid var(--primary);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .event-card h4 {
