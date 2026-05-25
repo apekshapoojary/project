@@ -23,6 +23,7 @@ def create_event():
         data = {
             "title": request.form['title'],
             "date": request.form['date'],
+            "time": request.form['time'],
             "venue": request.form['venue'],
             "description": request.form['description'],
             "coordinator": request.form.get('coordinator', 'N/A'),

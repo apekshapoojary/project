@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="scanner-container glass-card" data-aos="zoom-in" style="max-width: 600px; margin: 50px auto; padding: 40px; text-align: center; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.1);">
+    <h1 class="gradient-text mb-4" style="font-weight: 800; font-family: 'Outfit', sans-serif;"><i class="fas fa-qrcode mr-2"></i>Scan Attendance</h1>
+    <p class="mb-5" style="opacity: 0.8; font-size: 0.95rem;">Scan the Event Attendance QR code displayed on the host screen to instantly mark your attendance.</p>
+    
+    <div id="reader" style="width: 100%; border-radius: 20px; overflow: hidden; border: 2px solid var(--primary); background: rgba(0,0,0,0.2);"></div>
+    
+    <div id="scan-feedback" class="mt-4" style="display: none;">
+        <div class="alert alert-info glass-card" style="padding: 15px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(123, 92, 255, 0.1);">
+            <p id="feedback-text" style="margin: 0; font-weight: 600; color: #fff;"></p>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+    function onScanSuccess(decodedText, decodedResult) {
+        console.log(`Code matched = ${decodedText}`, decodedResult);
+        
+        // Disable scanner temporarily
+        html5QrcodeScanner.clear();
+        
+        // Show feedback
+        const feedbackDiv = document.getElementById('scan-feedback');
+        const feedbackText = document.getElementById('feedback-text');
+        feedbackDiv.style.display = 'block';
+        feedbackText.innerText = "QR Code detected! Processing redirect...";
+        
+        // Check if scanned text contains our attendance path
+        if (decodedText.includes('/mark_attendance_self/')) {
+            // Redirect the student's browser directly to the attendance link!
+            window.location.href = decodedText;
+        } else {
+            // Check if they scanned a raw 24-character event ID hex string
+            const isHex = /^[0-9a-fA-F]{24}$/.test(decodedText.trim());
+            if (isHex) {
+                window.location.href = '/mark_attendance_self/' + decodedText.trim();
+            } else {
+                feedbackText.innerHTML = `<span style="color: #f59e0b;"><i class="fas fa-exclamation-triangle"></i> Invalid Attendance QR Code. Please scan the official Event QR.</span>`;
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
+            }
+        }
+    }
+
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", { fps: 10, qrbox: {width: 250, height: 250} }, /* verbose= */ false);
+    html5QrcodeScanner.render(onScanSuccess);
+</script>
+{% endblock %}

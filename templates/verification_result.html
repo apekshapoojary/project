@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; align-items: center; justify-content: center; min-height: 70vh; padding: 20px;">
+    <div class="glass-card" style="max-width: 480px; width: 100%; padding: 40px; text-align: center; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));" data-aos="zoom-in">
+        
+        {% if status == "success" %}
+            <!-- Success Animation / Graphics -->
+            <div style="position: absolute; top: -50px; right: -50px; width: 120px; height: 120px; background: rgba(16, 185, 129, 0.1); filter: blur(40px); border-radius: 50%;"></div>
+            
+            <div style="background: rgba(16, 185, 129, 0.1); color: #10b981; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 25px; border: 2px solid rgba(16, 185, 129, 0.2); box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: #10b981; font-weight: 700; display: block; margin-bottom: 10px;">Security Access Granted</span>
+            <h2 style="font-weight: 800; font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 20px; color: #ffffff;">Attendance Verified!</h2>
+            
+            <div class="glass-card" style="text-align: left; padding: 20px; border-radius: 16px; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 30px;">
+                <div style="margin-bottom: 12px;">
+                    <span style="font-size: 0.75rem; opacity: 0.5; display: block;">STUDENT NAME</span>
+                    <span style="font-weight: 700; font-size: 1rem; color: #ffffff;">{{ student_name }}</span>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <span style="font-size: 0.75rem; opacity: 0.5; display: block;">EMAIL ADDRESS</span>
+                    <span style="font-weight: 600; font-size: 0.9rem; opacity: 0.9;">{{ email }}</span>
+                </div>
+                <div>
+                    <span style="font-size: 0.75rem; opacity: 0.5; display: block;">EVENT PROTOCOL</span>
+                    <span style="font-weight: 700; font-size: 1rem; color: var(--secondary);">{{ event_title }}</span>
+                </div>
+            </div>
+            
+            <p style="opacity: 0.7; font-size: 0.9rem; line-height: 1.6; margin-bottom: 30px;">
+                The presence log for this registration has been successfully authenticated and stored in the campus ledger.
+            </p>
+        {% else %}
+            <!-- Error Graphics -->
+            <div style="position: absolute; top: -50px; right: -50px; width: 120px; height: 120px; background: rgba(239, 68, 68, 0.1); filter: blur(40px); border-radius: 50%;"></div>
+            
+            <div style="background: rgba(239, 68, 68, 0.1); color: #ef4444; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 25px; border: 2px solid rgba(239, 68, 68, 0.2); box-shadow: 0 0 30px rgba(239, 68, 68, 0.2);">
+                <i class="fas fa-times-circle"></i>
+            </div>
+            
+            <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: #ef4444; font-weight: 700; display: block; margin-bottom: 10px;">Security Access Denied</span>
+            <h2 style="font-weight: 800; font-family: 'Outfit', sans-serif; font-size: 1.8rem; margin-bottom: 20px; color: #ffffff;">Verification Failed</h2>
+            
+            <div style="background: rgba(239, 68, 68, 0.05); padding: 15px 20px; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.15); margin-bottom: 30px;">
+                <p style="margin: 0; color: #fca5a5; font-size: 0.9rem; line-height: 1.5;">{{ message }}</p>
+            </div>
+        {% endif %}
+        
+        <a href="/" class="btn-primary-glow" style="display: block; text-align: center; padding: 12px; border-radius: 12px; text-decoration: none; font-size: 0.9rem; font-weight: 600;">
+            Return to Terminal
+        </a>
+    </div>
+</div>
+{% endblock %}

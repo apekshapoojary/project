@@ -61,6 +61,10 @@ def admin_events():
     else:
         events = list(db.events.find({"organizer_id": admin_id}))
         
+    for event in events:
+        event['present_count'] = db.registrations.count_documents({"event_id": event['_id'], "attendance": True})
+        event['absent_count'] = db.registrations.count_documents({"event_id": event['_id'], "attendance": False})
+        
     current_date = datetime.now().strftime("%Y-%m-%d")
     return render_template('admin_events.html', events=events, current_date=current_date)
 
@@ -82,17 +86,29 @@ def event_qr(event_id):
     # Assuming students scan with their phone and are logged into the portal
     qr_content = url_for('admin.mark_attendance_self', event_id=event_id, _external=True)
     
-    qr_path = f"static/uploads/event_qr_{event_id}.png"
-    if not os.path.exists(qr_path):
-        generate_qr(qr_content, qr_path)
-        
-    return send_file(qr_path, mimetype='image/png')
+    # Generate QR code dynamically in memory to always use the current domain (e.g. localhost or tunnel URL)
+    import qrcode
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(qr_content)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+    
+    img_io = io.BytesIO()
+    img.save(img_io, 'PNG')
+    img_io.seek(0)
+    
+    return send_file(img_io, mimetype='image/png')
 
 @admin_bp.route('/mark_attendance_self/<event_id>')
 def mark_attendance_self(event_id):
     if 'user_id' not in session:
         flash('Please login to mark your attendance.', 'error')
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('auth.login', next=request.full_path))
         
     user_id = session['user_id']
     user = db.users.find_one({"_id": ObjectId(user_id)})

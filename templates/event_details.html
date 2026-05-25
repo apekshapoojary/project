@@ -21,6 +21,9 @@
             <h1>{{ event.title }}</h1>
             <div class="event-meta-lg">
                 <p><i class="fas fa-calendar-day"></i> <strong>Event Date:</strong> {{ event.date }}</p>
+                {% if event.time %}
+                <p><i class="fas fa-clock"></i> <strong>Event Time:</strong> {{ event.time }}</p>
+                {% endif %}
                 <p><i class="fas fa-map-marker-alt"></i> <strong>Venue:</strong> {{ event.venue }}</p>
                 <p><i class="fas fa-user-tie"></i> <strong>Coordinator:</strong> {{ event.coordinator }}</p>
             </div>

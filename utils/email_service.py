@@ -22,7 +22,7 @@ def send_registration_email(to_email, user_name, event_name, event_date, registr
 
 def send_certificate_email(to_email, user_name, event_name, pdf_path):
     try:
-        msg = Message(f"Your Certificate of Participation: {event_name}",
+        msg = Message(f"Your Certificate of Achievement: {event_name}",
                       recipients=[to_email])
         msg.body = f"Hi {user_name},\n\nCongratulations! You have completed {event_name}. Please find your certificate attached.\n\nBest regards,\nEventLink Team"
         

@@ -12,16 +12,20 @@
             <label for="title">Event Name</label>
             <input type="text" id="title" name="title" placeholder="e.g. Annual Tech Symposium" required>
         </div>
-        
-        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-row" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
             <div class="form-group">
                 <label for="date">Event Date</label>
                 <input type="date" id="date" name="date" required>
             </div>
             <div class="form-group">
-                <label for="venue">Venue</label>
-                <input type="text" id="venue" name="venue" placeholder="e.g. Main Auditorium" required>
+                <label for="time">Event Time</label>
+                <input type="time" id="time" name="time" required>
             </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="venue">Venue</label>
+            <input type="text" id="venue" name="venue" placeholder="e.g. Main Auditorium" required>
         </div>
 
         <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">

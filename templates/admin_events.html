@@ -12,8 +12,12 @@
             <tr>
                 <th>Event Name</th>
                 <th>Date</th>
+                <th>Time</th>
                 <th>Venue</th>
-                <th>Actions</th>
+                <th>Present</th>
+                <th>Absent</th>
+                <th>Operations</th>
+                <th style="text-align: center;">Attendance Access</th>
             </tr>
         </thead>
         <tbody>
@@ -21,21 +25,43 @@
             <tr>
                 <td style="font-weight: 600;">{{ event.title }}</td>
                 <td>{{ event.date }}</td>
+                <td>{{ event.time or 'N/A' }}</td>
                 <td>{{ event.venue }}</td>
                 <td>
-                    <div style="display: flex; gap: 10px;">
-                        <a href="/admin/participants/{{ event._id|string }}" class="btn-action"><i class="fas fa-users"></i> Participants</a>
-                        {% if event.date == current_date %}
-                        <button onclick="showQR('{{ event._id|string }}', '{{ event.title }}')" class="btn-action" style="background: #001f3f; color: white; border: none;">
-                            <i class="fas fa-qrcode"></i> Attendance QR
+                    {% if event.date == current_date %}
+                        <span style="color: #10b981; font-weight: 700;">{{ event.present_count }}</span>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if event.date == current_date %}
+                        <span style="color: #f59e0b; font-weight: 700;">{{ event.absent_count }}</span>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/admin/participants/{{ event._id|string }}" class="btn-action"><i class="fas fa-users"></i> View Participants</a>
+                </td>
+                <td style="text-align: center;">
+                    {% if event.date == current_date %}
+                    <div style="display: flex; gap: 8px; justify-content: center;">
+                        <button onclick="showQR('{{ event._id|string }}', '{{ event.title }}')" class="btn-action" style="background: #001f3f; color: white; border: none; padding: 8px 15px;">
+                            <i class="fas fa-qrcode"></i> QR
                         </button>
-                        {% endif %}
+                        <button onclick="copyAttendanceLink('{{ event._id|string }}')" class="btn-action" style="background: var(--secondary); color: white; border: none; padding: 8px 15px;">
+                            <i class="fas fa-link"></i> Link
+                        </button>
                     </div>
+                    {% else %}
+                    <span style="opacity: 0.3; font-size: 0.8rem;">Locked (Not Today)</span>
+                    {% endif %}
                 </td>
             </tr>
             {% else %}
             <tr>
-                <td colspan="4" style="text-align: center; padding: 40px; color: var(--text-muted);">No events created yet.</td>
+                <td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);">No events created yet.</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -64,6 +90,17 @@ function showQR(eventId, title) {
 function closeQR() {
     document.getElementById('qrModal').style.display = 'none';
     document.getElementById('modalOverlay').style.display = 'none';
+}
+
+function copyAttendanceLink(eventId) {
+    const baseUrl = window.location.origin;
+    const attendanceUrl = `${baseUrl}/mark_attendance_self/${eventId}`;
+    
+    navigator.clipboard.writeText(attendanceUrl).then(() => {
+        alert("Attendance link copied to clipboard!\n\n" + attendanceUrl);
+    }).catch(err => {
+        console.error('Could not copy text: ', err);
+    });
 }
 </script>
 {% endblock %}

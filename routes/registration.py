@@ -37,7 +37,16 @@ def register(event_id):
         flash('You are already registered for this event.', 'error')
     else:
         # Insert registration record
-        db.registrations.insert_one(registration_data)
+        res = db.registrations.insert_one(registration_data)
+        reg_id = str(res.inserted_id)
+        
+        # Generate QR code containing direct public verification URL
+        qr_content = url_for('registration.verify_attendance', reg_id=reg_id, _external=True)
+        qr_filename = f"static/uploads/qr_{reg_id}.png"
+        generate_qr(qr_content, qr_filename)
+        
+        # Update registration with QR path
+        db.registrations.update_one({"_id": res.inserted_id}, {"$set": {"qr_code": qr_filename}})
         
         # Send Confirmation Email
         event = db.events.find_one({"_id": ObjectId(event_id)})
@@ -51,9 +60,37 @@ def register(event_id):
                 registration_time=registration_time
             )
         
-        flash('Registration successful! Please check your email for confirmation.', 'success')
+        flash('Registration successful! Your entry pass QR code has been generated.', 'success')
     
     return redirect(url_for('dashboard.dashboard'))
+
+@registration_bp.route('/verify_attendance/<reg_id>')
+def verify_attendance(reg_id):
+    try:
+        reg = db.registrations.find_one({"_id": ObjectId(reg_id)})
+        if not reg:
+            return render_template('verification_result.html', status="error", message="Registration record not found.")
+        
+        event = db.events.find_one({"_id": reg['event_id']})
+        event_title = event['title'] if event else "Unknown Event"
+        
+        # Mark attendance present
+        db.registrations.update_one({"_id": ObjectId(reg_id)}, {"$set": {"attendance": True}})
+        
+        # Pre-generate certificate for instant download
+        try:
+            cert_path = f"static/uploads/cert_{reg_id}.pdf"
+            generate_certificate(reg['name'], event_title, event['date'] if event else "N/A", cert_path)
+        except Exception:
+            pass
+            
+        return render_template('verification_result.html', 
+                               status="success", 
+                               student_name=reg['name'], 
+                               email=reg['email'], 
+                               event_title=event_title)
+    except Exception as e:
+        return render_template('verification_result.html', status="error", message=str(e))
 
 @registration_bp.route('/download_certificate/<reg_id>')
 def download_certificate(reg_id):
