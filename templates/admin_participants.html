@@ -43,11 +43,19 @@
                     {% endif %}
                 </td>
                 <td>
-                    {% if user.attendance or (event and event.date < current_date) %}
-                    <a href="/download_certificate/{{ user._id|string }}" class="btn-action" style="background: var(--white); color: var(--primary); border: 1px solid var(--primary);">Certificate</a>
-                    {% else %}
-                    <span style="opacity: 0.3; font-size: 0.8rem;"><i class="fas fa-lock"></i> Locked</span>
-                    {% endif %}
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        {% if user.qr_code %}
+                        <button onclick="showStudentQR('/{{ user.qr_code }}', '{{ user.name }}')" class="btn-action" style="background: #001f3f; color: white; border: none; padding: 6px 12px; cursor: pointer; border-radius: 8px; font-size: 0.8rem; font-weight: 600;">
+                            <i class="fas fa-qrcode"></i> View QR
+                        </button>
+                        {% endif %}
+                        
+                        {% if user.attendance or (event and event.date < current_date) %}
+                        <a href="/download_certificate/{{ user._id|string }}" class="btn-action" style="background: var(--white); color: var(--primary); border: 1px solid var(--primary); padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; text-decoration: none;">Certificate</a>
+                        {% else %}
+                        <span style="opacity: 0.4; font-size: 0.8rem; display: flex; align-items: center; gap: 5px;"><i class="fas fa-lock"></i> Locked</span>
+                        {% endif %}
+                    </div>
                 </td>
             </tr>
             {% else %}
@@ -58,4 +66,29 @@
         </tbody>
     </table>
 </div>
+
+{% block extra_js %}
+<!-- Student QR Modal -->
+<div id="studentQRModal" class="glass-card" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2000; padding: 40px; text-align: center; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 0 100px rgba(0,0,0,0.8); border-radius: 20px;">
+    <h3 style="margin-bottom: 20px; font-family: 'Outfit', sans-serif; font-weight: 700;">Student Entry pass</h3>
+    <img id="qrImage" src="" style="width: 260px; height: 260px; border: 10px solid white; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+    <p style="opacity: 0.8; font-size: 0.95rem; font-weight: 600;" id="modalStudentName"></p>
+    <button onclick="closeStudentQR()" class="btn-action" style="margin-top: 20px; width: 100%; background: var(--secondary); border: none; color: white; padding: 12px; border-radius: 10px; cursor: pointer;">Close</button>
+</div>
+<div id="modalOverlay" onclick="closeStudentQR()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1999;"></div>
+
+<script>
+function showStudentQR(qrPath, studentName) {
+    document.getElementById('qrImage').src = qrPath;
+    document.getElementById('modalStudentName').innerText = studentName;
+    document.getElementById('studentQRModal').style.display = 'block';
+    document.getElementById('modalOverlay').style.display = 'block';
+}
+
+function closeStudentQR() {
+    document.getElementById('studentQRModal').style.display = 'none';
+    document.getElementById('modalOverlay').style.display = 'none';
+}
+</script>
+{% endblock %}
 {% endblock %}

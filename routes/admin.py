@@ -322,6 +322,55 @@ def bulk_certificates():
     flash(f'Successfully generated {count} certificates for present participants.', 'success')
     return redirect(url_for('admin.dashboard'))
 
+@admin_bp.route('/admin/delete_event/<event_id>', methods=['POST'])
+def delete_event(event_id):
+    if 'admin_id' not in session or session.get('role') not in ['admin', 'organizer']:
+        return redirect(url_for('admin.admin_login'))
+        
+    role = session.get('role')
+    admin_id = session.get('admin_id')
+    
+    event = db.events.find_one({"_id": ObjectId(event_id)})
+    if not event:
+        flash('Event not found.', 'error')
+        return redirect(url_for('admin.admin_events'))
+        
+    # Security: Organizer can only delete their own events, Admin can delete any
+    if role == 'organizer' and event.get('organizer_id') != admin_id:
+        flash('Unauthorized to delete this event.', 'error')
+        return redirect(url_for('admin.admin_events'))
+        
+    # Delete registrations first to keep database clean
+    regs = list(db.registrations.find({"event_id": ObjectId(event_id)}))
+    for reg in regs:
+        reg_id_str = str(reg['_id'])
+        paths_to_delete = [
+            f"static/uploads/qr_{reg_id_str}.png",
+            f"static/uploads/cert_{reg_id_str}.pdf"
+        ]
+        for path in paths_to_delete:
+            if os.path.exists(path):
+                try:
+                    os.remove(path)
+                except Exception:
+                    pass
+                    
+    db.registrations.delete_many({"event_id": ObjectId(event_id)})
+    
+    # Delete event QR code image if it exists
+    event_qr_path = f"static/uploads/event_qr_{event_id}.png"
+    if os.path.exists(event_qr_path):
+        try:
+            os.remove(event_qr_path)
+        except Exception:
+            pass
+            
+    # Delete the event itself
+    db.events.delete_one({"_id": ObjectId(event_id)})
+    
+    flash('Event and all associated credentials have been successfully purged!', 'success')
+    return redirect(url_for('admin.admin_events'))
+
 @admin_bp.route('/admin/logout')
 def admin_logout():
     session.pop('admin_id', None)
