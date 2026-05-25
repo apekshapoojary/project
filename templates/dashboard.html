@@ -126,7 +126,7 @@
                     <th style="padding: 15px;">Timeline</th>
                     <th style="padding: 15px;">Status</th>
                     {% if role == 'student' %}
-                    <th style="padding: 15px;">Entry Pass</th>
+                    <th style="padding: 15px;">Venue</th>
                     {% endif %}
                     <th style="padding: 15px;">Event Timing</th>
                 </tr>
@@ -150,13 +150,9 @@
                     </td>
                     {% if role == 'student' %}
                     <td style="padding: 20px;">
-                        {% if reg.qr_code %}
-                        <a href="/{{ reg.qr_code }}" target="_blank" class="badge" style="background: rgba(123, 92, 255, 0.15); color: #7b5cff; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">
-                            <i class="fas fa-qrcode"></i> VIEW TICKET
-                        </a>
-                        {% else %}
-                        <span style="font-size: 0.85rem; opacity: 0.4;">N/A</span>
-                        {% endif %}
+                        <span style="font-size: 0.85rem; color: #fbbf24; font-weight: 600; background: rgba(251, 191, 36, 0.1); padding: 5px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
+                            <i class="fas fa-map-marker-alt"></i> {{ reg.event_venue }}
+                        </span>
                     </td>
                     {% endif %}
                     <td style="padding: 20px;">

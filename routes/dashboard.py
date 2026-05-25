@@ -55,6 +55,7 @@ def dashboard():
         reg['event_title'] = event['title'] if event else "Unknown"
         reg['event_date'] = event['date'] if event else "N/A"
         reg['event_time'] = event.get('time', '') if event else ""
+        reg['event_venue'] = event.get('venue', 'N/A') if event else "N/A"
         reg['id_str'] = str(reg['_id'])
         
     return render_template('dashboard.html', 
